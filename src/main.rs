@@ -96,8 +96,8 @@ fn fetch_snapshots() -> Result<Vec<Snapshot>> {
             None => continue,
         };
 
-        // Skip docker snapshots
-        if dataset.contains("docker") {
+        // Skip docker and backup pool snapshots
+        if dataset.contains("docker") || dataset.starts_with("backup") {
             continue;
         }
 
@@ -207,21 +207,53 @@ fn main() -> Result<()> {
                 .block(Block::default().borders(Borders::BOTTOM));
             frame.render_widget(title, chunks[0]);
 
-            // Dataset selector
-            let ds_line = datasets
+            // Dataset selector with horizontal scrolling
+            let selector_inner_width = chunks[1].width.saturating_sub(2) as usize;
+            // Build spans and compute widths per dataset
+            let ds_widths: Vec<usize> = datasets
                 .iter()
                 .enumerate()
                 .map(|(i, name)| {
-                    if i == selected {
-                        Span::styled(
-                            format!(" [{}] ", name),
-                            Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
-                        )
-                    } else {
-                        Span::raw(format!("  {}  ", name))
-                    }
+                    if i == selected { name.len() + 4 } else { name.len() + 4 } // " [name] " or "  name  "
                 })
-                .collect::<Vec<_>>();
+                .collect();
+            // Find a visible window around `selected` that fits within the width
+            let mut start = selected;
+            let mut end = selected + 1;
+            let mut total_w = ds_widths[selected];
+            // Expand window left/right while it fits
+            loop {
+                let mut expanded = false;
+                if start > 0 && total_w + ds_widths[start - 1] <= selector_inner_width {
+                    start -= 1;
+                    total_w += ds_widths[start];
+                    expanded = true;
+                }
+                if end < datasets.len() && total_w + ds_widths[end] <= selector_inner_width {
+                    total_w += ds_widths[end];
+                    end += 1;
+                    expanded = true;
+                }
+                if !expanded { break; }
+            }
+            let mut ds_line: Vec<Span> = Vec::new();
+            if start > 0 {
+                ds_line.push(Span::styled("◀ ", Style::default().fg(Color::DarkGray)));
+            }
+            for (i, name) in datasets.iter().enumerate() {
+                if i < start || i >= end { continue; }
+                if i == selected {
+                    ds_line.push(Span::styled(
+                        format!(" [{}] ", name),
+                        Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                    ));
+                } else {
+                    ds_line.push(Span::raw(format!("  {}  ", name)));
+                }
+            }
+            if end < datasets.len() {
+                ds_line.push(Span::styled(" ▶", Style::default().fg(Color::DarkGray)));
+            }
             let selector = Paragraph::new(Line::from(ds_line))
                 .block(Block::default().borders(Borders::ALL).title("Dataset"));
             frame.render_widget(selector, chunks[1]);
