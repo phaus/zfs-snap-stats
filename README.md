@@ -1,14 +1,17 @@
 # zfs-snap-stats
 
-A terminal UI tool that visualizes ZFS snapshot statistics over the last 30 days. Shows daily size changes per dataset with color-coded bars indicating backup status.
+A terminal UI tool that visualizes ZFS snapshot statistics over the last 30 days. Shows a backup dashboard with pool summary and daily size changes per dataset with color-coded bars indicating backup status.
 
-![screenshot](screenshot.png)
+![Dashboard](screenshot-dashboard.png)
+
+![Snapshot Details](screenshot-snapshots.png)
 
 ## Features
 
-- Bar chart of daily snapshot size changes
+- **Dashboard** with backup target sizes, totals, and pool free space
+- Bar chart of daily snapshot size changes per dataset
 - Color coding: green (data changed), gray (0B change), red (no backup)
-- Switch between ZFS datasets with arrow keys
+- Horizontal scrolling dataset selector for narrow terminals
 - Auto-detects local ZFS or falls back to SSH (`root@192.168.168.137`)
 - Bars scale to fill the terminal width
 
@@ -28,9 +31,11 @@ cargo build --release
 
 | Key | Action |
 |-----|--------|
+| `Enter` / `Tab` | Open snapshot details (from dashboard) |
+| `Esc` / `Backspace` | Back to dashboard |
 | `Left` / `h` | Previous dataset |
 | `Right` / `l` | Next dataset |
-| `q` / `Esc` | Quit |
+| `q` | Quit |
 
 ## Dependencies
 
