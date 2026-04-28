@@ -19,6 +19,7 @@ Example scripts for automated ZFS snapshot-based backups using
 
 ## Scripts
 
+- **sync-zfs-snapshots** -- Python script to sync snapshots between pools (from [phaus/sync-zfs-snapshots](https://github.com/phaus/sync-zfs-snapshots))
 - **setup.sh** -- installs zfSnap and sync-zfs-snapshots
 - **backup.sh** -- creates snapshots and syncs them from `tank` to `backup` pool
 - **cleanup.sh** -- removes old snapshots matching a TTL marker

@@ -40,4 +40,12 @@ cargo build --release
 
 ## Backup Setup Example
 
-The [`examples/`](examples/) directory contains the backup scripts that generate the ZFS snapshots this tool visualizes. See [`examples/README.md`](examples/README.md) for details.
+The [`examples/`](examples/) directory contains the backup scripts that generate the ZFS snapshots this tool visualizes:
+
+- **backup.sh** -- creates daily snapshots via [zfSnap](https://www.zfsnap.org/) and syncs them to a backup pool
+- **sync-zfs-snapshots** -- Python script that incrementally replicates snapshots between ZFS pools (from [phaus/sync-zfs-snapshots](https://github.com/phaus/sync-zfs-snapshots))
+- **cleanup.sh** -- removes expired snapshots by TTL marker
+- **setup.sh** -- installs zfSnap and sync-zfs-snapshots
+- **stats.sh** -- shows pool status and I/O stats
+
+See [`examples/README.md`](examples/README.md) for TTL modifiers and cron setup.

@@ -3,9 +3,6 @@
 ROOT_DS=(
     backups
     home
-    kopia
-    nas
-    proxmox
 )
 
 FOLDERS=(
@@ -17,9 +14,6 @@ home/bob/media
 home/bob/streaming
 home/bob/immich
 home/private
-kopia
-nas
-proxmox
 )
 
 SOURCE_POOL=tank
