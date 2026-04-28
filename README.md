@@ -37,3 +37,7 @@ cargo build --release
 - [ratatui](https://github.com/ratatui/ratatui) -- TUI framework
 - [crossterm](https://github.com/crossterm-rs/crossterm) -- terminal backend
 - [chrono](https://github.com/chronotope/chrono) -- date handling
+
+## Backup Setup Example
+
+The [`examples/`](examples/) directory contains the backup scripts that generate the ZFS snapshots this tool visualizes. See [`examples/README.md`](examples/README.md) for details.
